@@ -11,36 +11,36 @@ TriggerEvent('es:addAdminCommand', 'eventdata', 13, function(source, args, user)
     if args[1] then
         if args[1] == 'create' then
             local Pos = {x = playerpos.x, y = playerpos.y, z = playerpos.z +0.5} 
-            TriggerEvent('br_events:create', Pos, _source)
+            TriggerEvent('FZ_events:create', Pos, _source)
         elseif args[1] == 'delete' then
-            TriggerEvent('br_events:delete', _source)
+            TriggerEvent('FZ_events:delete', _source)
         elseif args[1] == 'status' then
             if args[2] == 'true' or args[2] == 'false' then
-                TriggerEvent('br_events:changestatus', args[2], _source)
+                TriggerEvent('FZ_events:changestatus', args[2], _source)
             else
                 TriggerClientEvent('chatMessage', source, "[EVENT SYSTEM]", {255, 0, 0}, " ^0Shoma Dar Ghesmat Status Bayad true Ya false Vared")
             end
         elseif args[1] == 'remove' then
             if args[2] == 'car1' or args[2] == 'car2' then
-                TriggerEvent('br_events:removecar', args[2], _source)
+                TriggerEvent('FZ_events:removecar', args[2], _source)
             elseif args[2] == 'gun1' or args[2] == 'gun2'then
-                TriggerEvent('br_events:removegun', args[2], _source)
+                TriggerEvent('FZ_events:removegun', args[2], _source)
             elseif args[2] == 'skin1' or args[2] == 'skin2' then
-                TriggerEvent('br_events:removeskin', args[2], _source)
+                TriggerEvent('FZ_events:removeskin', args[2], _source)
             else
                 TriggerClientEvent('chatMessage', source, "[EVENT SYSTEM]", {255, 0, 0}, " ^0Shoma Dar Ghesmat Akhar Remove Bayad Yeki Az Option Haye car1, car2, gun1, gun2, skin1, skin2 Vared Konid")
             end
         elseif args[1] == 'sync' then
             local aPlayers = FZ.GetPlayers()
             for i=1, #aPlayers, 1 do
-                TriggerClientEvent('br_events:sync', aPlayers[i])
+                TriggerClientEvent('FZ_events:sync', aPlayers[i])
             end
             TriggerClientEvent('chatMessage', source, "[EVENT SYSTEM]", {255, 0, 0}, " ^0Option Haye Event Baraye Tamami Player Ha Sync Shod")
         elseif args[1] == 'vest' then
             if tonumber(args[2]) then
 				local armor = tonumber(args[2])
                 if armor <= 100 then
-                    TriggerEvent('br_events:changevest', args[2], _source)
+                    TriggerEvent('FZ_events:changevest', args[2], _source)
                 else
                     TriggerClientEvent('chatMessage', source, "[EVENT SYSTEM]", {255, 0, 0}, " ^0Shoma Nemitavanid Meghdar Armor Ra Bishtar Az 100 Set Konid")
                 end
@@ -54,7 +54,7 @@ TriggerEvent('es:addAdminCommand', 'eventdata', 13, function(source, args, user)
                         local ben = tonumber(args[4])
                         if ben <= 100 then
                             local Pos = {x = playerpos.x, y = playerpos.y, z = playerpos.z}
-                            TriggerEvent('br_events:changecar', args[1], args[2], args[3], args[4], Pos, _source)
+                            TriggerEvent('FZ_events:changecar', args[1], args[2], args[3], args[4], Pos, _source)
                         else
                             TriggerClientEvent('chatMessage', source, "[EVENT SYSTEM]", {255, 0, 0}, " ^0Shoma Nemitavanid Meghdar Benzin Ra Bishtar Az 100 Set Konid")
                         end
@@ -69,12 +69,12 @@ TriggerEvent('es:addAdminCommand', 'eventdata', 13, function(source, args, user)
             end
         elseif args[1] == 'carspawn' then
             local Pos = {x = playerpos.x, y = playerpos.y, z = playerpos.z , h = xPlayer.angel }
-            TriggerEvent('br_events:changecarspawn', Pos, _source)
+            TriggerEvent('FZ_events:changecarspawn', Pos, _source)
         elseif args[1] == 'gun1' or args[1] == 'gun2' then
             if args[2]:find('weapon_') or args[2]:find('WEAPON_')then
                 if tonumber(args[3]) then
                     local Pos = {x = playerpos.x, y = playerpos.y, z = playerpos.z}
-                    TriggerEvent('br_events:changegun', args[1], args[2], args[3], Pos, _source)
+                    TriggerEvent('FZ_events:changegun', args[1], args[2], args[3], Pos, _source)
                 else
                     TriggerClientEvent('chatMessage', source, "[EVENT SYSTEM]", {255, 0, 0}, " ^0Shoma Dar Ghesmat Tedad Tir Faghat Mitavanid Adad Vared Konid")
                 end
@@ -85,7 +85,7 @@ TriggerEvent('es:addAdminCommand', 'eventdata', 13, function(source, args, user)
             if tonumber(args[2]) then
                 if GetPlayerName(args[2]) then
                     local Pos = {x = playerpos.x, y = playerpos.y, z = playerpos.z}
-                    TriggerEvent('br_events:changeskin', args[1], args[2], Pos, _source)
+                    TriggerEvent('FZ_events:changeskin', args[1], args[2], Pos, _source)
                 else
                     TriggerClientEvent('chatMessage', source, "[EVENT SYSTEM]", {255, 0, 0}, " ^0Player Vared Shode Vojod Nadarad")
                 end
@@ -103,14 +103,14 @@ end, function(source, args, user)
 end, {help = "Taghir Option Haye Event", params = {{name = "Noe Taghir", help = "create, delete, remove, sync, status, vest, car1, car2, carspawn, gun1, gun2, skin1, skin2"}}})
 
 
-FZ.RegisterServerCallback('br_events:getData', function(source, cb)
+FZ.RegisterServerCallback('FZ_events:getData', function(source, cb)
     MySQL.Async.fetchAll('SELECT * FROM events_data', {}, function(data)
 		cb(data[1])
     end)
 end)
 
-RegisterNetEvent('br_events:create')
-AddEventHandler('br_events:create', function(pos, source)
+RegisterNetEvent('FZ_events:create')
+AddEventHandler('FZ_events:create', function(pos, source)
     MySQL.Async.fetchAll('SELECT * FROM events_data', {}, function(data)
 		if data[1] == nil then
 			MySQL.Async.execute('INSERT INTO `events_data` (`status`, `tp`, `vest`) VALUES (1, @pos, 0)', {
@@ -118,7 +118,7 @@ AddEventHandler('br_events:create', function(pos, source)
 			}, function(rowsChanged)
 				if rowsChanged > 0 then
 					TriggerClientEvent('esx:ShowJLNotification', source, 'Shoma Ba Movafaghiyat Event Ra Sakhtid')
-					TriggerClientEvent('br_events:sync', source)
+					TriggerClientEvent('FZ_events:sync', source)
 				end
 			end)
 		else
@@ -127,12 +127,12 @@ AddEventHandler('br_events:create', function(pos, source)
     end)
 end)
 
-RegisterNetEvent('br_events:delete')
-AddEventHandler('br_events:delete', function(source)
+RegisterNetEvent('FZ_events:delete')
+AddEventHandler('FZ_events:delete', function(source)
 	MySQL.Async.fetchAll('SELECT * FROM events_data', {}, function(data)
 		if data[1] ~= nil then
 			MySQL.Async.execute('UPDATE events_data SET status = 0', {})
-			TriggerClientEvent('br_events:sync', source)
+			TriggerClientEvent('FZ_events:sync', source)
 			Wait(4000)
 			MySQL.Async.execute('DELETE FROM events_data', {}, function(rowsChanged)
 				if rowsChanged > 0 then
@@ -145,8 +145,8 @@ AddEventHandler('br_events:delete', function(source)
 	end)
 end)
 
-RegisterNetEvent('br_events:changestatus')
-AddEventHandler('br_events:changestatus', function(tf, source)
+RegisterNetEvent('FZ_events:changestatus')
+AddEventHandler('FZ_events:changestatus', function(tf, source)
     local st
     local nt
     if tf == 'true' then
@@ -162,13 +162,13 @@ AddEventHandler('br_events:changestatus', function(tf, source)
     }, function(rowsChanged)
         if rowsChanged > 0 then
             TriggerClientEvent('esx:ShowJLNotification', source, 'Shoma Ba Movafaghiyat Event Ra' .. nt)
-            TriggerClientEvent('br_events:sync', source)
+            TriggerClientEvent('FZ_events:sync', source)
         end
     end)
 end)
 
-RegisterNetEvent('br_events:changecar')
-AddEventHandler('br_events:changecar', function(type, model, plate, benzin, pos, source)
+RegisterNetEvent('FZ_events:changecar')
+AddEventHandler('FZ_events:changecar', function(type, model, plate, benzin, pos, source)
     if type == 'car1' then
         MySQL.Async.execute('UPDATE events_data SET car1 = @model, car1_plate = @plate, car1_fuel = @benzin, car1_marker = @pos', {
             ['@model'] = model,
@@ -178,7 +178,7 @@ AddEventHandler('br_events:changecar', function(type, model, plate, benzin, pos,
         }, function(rowsChanged)
             if rowsChanged > 0 then
                 TriggerClientEvent('esx:ShowJLNotification', source, 'Shoma Ba Movafaghiyat Vasile Naghlie Aval Ba Model '..model..' Ba Pelak '..plate..' Ba ' ..benzin.. ' Benzin Baraye Event Gharar Dadid')
-                TriggerClientEvent('br_events:sync', source)
+                TriggerClientEvent('FZ_events:sync', source)
             end
         end)
     elseif type == 'car2' then
@@ -190,26 +190,26 @@ AddEventHandler('br_events:changecar', function(type, model, plate, benzin, pos,
         }, function(rowsChanged)
             if rowsChanged > 0 then
                 TriggerClientEvent('esx:ShowJLNotification', source, 'Shoma Ba Movafaghiyat Vasile Naghlie Dovom Ba Model'..model..' Ba Pelak '..plate..' Ba ' ..benzin.. ' Benzin Baraye Event Gharar Dadid')
-                TriggerClientEvent('br_events:sync', source)
+                TriggerClientEvent('FZ_events:sync', source)
             end
         end)
     end
 end)
 
-RegisterNetEvent('br_events:changecarspawn')
-AddEventHandler('br_events:changecarspawn', function(pos, source)
+RegisterNetEvent('FZ_events:changecarspawn')
+AddEventHandler('FZ_events:changecarspawn', function(pos, source)
     MySQL.Async.execute('UPDATE events_data SET car_spawn = @pos', {
         ['@pos'] = json.encode(pos)
     }, function(rowsChanged)
         if rowsChanged > 0 then
             TriggerClientEvent('esx:ShowJLNotification', source, 'Shoma Ba Movafaghiyat Mahale Spawn Vasile Naghlie Baraye Event Gharar Dadid')
-            TriggerClientEvent('br_events:sync', source)
+            TriggerClientEvent('FZ_events:sync', source)
         end
     end)
 end)
 
-RegisterNetEvent('br_events:changegun')
-AddEventHandler('br_events:changegun', function(type, name, tir, pos, source)
+RegisterNetEvent('FZ_events:changegun')
+AddEventHandler('FZ_events:changegun', function(type, name, tir, pos, source)
     if type == 'gun1' then
         MySQL.Async.execute('UPDATE events_data SET gun1 = @name, gun1_ammo = @tir, gun1_marker = @pos', {
             ['@name'] = string.upper(name),
@@ -218,7 +218,7 @@ AddEventHandler('br_events:changegun', function(type, name, tir, pos, source)
         }, function(rowsChanged)
             if rowsChanged > 0 then
                 TriggerClientEvent('esx:ShowJLNotification', source, 'Shoma Ba Movafaghiyat Gun Aval '..FZ.GetWeaponLabel(name)..' Ba '..tir..' Tir Baraye Event Gharar Dadid')
-                TriggerClientEvent('br_events:sync', source)
+                TriggerClientEvent('FZ_events:sync', source)
             end
         end)
     elseif type == 'gun2' then
@@ -229,26 +229,26 @@ AddEventHandler('br_events:changegun', function(type, name, tir, pos, source)
         }, function(rowsChanged)
             if rowsChanged > 0 then
                 TriggerClientEvent('esx:ShowJLNotification', source, 'Shoma Ba Movafaghiyat Gun Dovom '..FZ.GetWeaponLabel(name)..' Ba '..tir..' Tir Baraye Event Gharar Dadid')
-                TriggerClientEvent('br_events:sync', source)
+                TriggerClientEvent('FZ_events:sync', source)
             end
         end)
     end
 end)
 
-RegisterNetEvent('br_events:changevest')
-AddEventHandler('br_events:changevest', function(meghdar, source)
+RegisterNetEvent('FZ_events:changevest')
+AddEventHandler('FZ_events:changevest', function(meghdar, source)
     MySQL.Async.execute('UPDATE events_data SET vest = @meghdar', {
         ['@meghdar'] = meghdar,
     }, function(rowsChanged)
         if rowsChanged > 0 then
             TriggerClientEvent('esx:ShowJLNotification', source, 'Shoma Ba Movafaghiyat Meghdar %' .. meghdar .. ' Vest Voroudi Baraye Event Gharar Dadid')
-            TriggerClientEvent('br_events:sync', source)
+            TriggerClientEvent('FZ_events:sync', source)
         end
     end)
 end)
 
-RegisterNetEvent('br_events:changeskin')
-AddEventHandler('br_events:changeskin', function(type, player, pos, source)
+RegisterNetEvent('FZ_events:changeskin')
+AddEventHandler('FZ_events:changeskin', function(type, player, pos, source)
     local xPlayer = FZ.GetPlayerFromId(player)
 
     MySQL.Async.fetchAll('SELECT * FROM users WHERE identifier = @identifier', {
@@ -270,7 +270,7 @@ AddEventHandler('br_events:changeskin', function(type, player, pos, source)
                 }, function(rowsChanged)
                     if rowsChanged > 0 then
                         TriggerClientEvent('esx:ShowJLNotification', source, 'Shoma Ba Movafaghiyat Lebas Khod Ra Baraye Lebas Mard Team Aval Event Gharar Dadid')
-                        TriggerClientEvent('br_events:sync', source)
+                        TriggerClientEvent('FZ_events:sync', source)
                     end
                 end)
             elseif type == 'skin2' then
@@ -280,7 +280,7 @@ AddEventHandler('br_events:changeskin', function(type, player, pos, source)
                 }, function(rowsChanged)
                     if rowsChanged > 0 then
                         TriggerClientEvent('esx:ShowJLNotification', source, 'Shoma Ba Movafaghiyat Lebas Khod Ra Baraye Lebas Mard Team Dovom Event Gharar Dadid')
-                        TriggerClientEvent('br_events:sync', source)
+                        TriggerClientEvent('FZ_events:sync', source)
                     end
                 end)
             end
@@ -292,7 +292,7 @@ AddEventHandler('br_events:changeskin', function(type, player, pos, source)
                 }, function(rowsChanged)
                     if rowsChanged > 0 then
                         TriggerClientEvent('esx:ShowJLNotification', source, 'Shoma Ba Movafaghiyat Lebas Khod Ra Baraye Lebas Zan Team Aval Event Shomare Gharar Dadid')
-                        TriggerClientEvent('br_events:sync', source)
+                        TriggerClientEvent('FZ_events:sync', source)
                     end
                 end)
             elseif type == 'skin2' then
@@ -302,7 +302,7 @@ AddEventHandler('br_events:changeskin', function(type, player, pos, source)
                 }, function(rowsChanged)
                     if rowsChanged > 0 then
                         TriggerClientEvent('esx:ShowJLNotification', source, 'Shoma Ba Movafaghiyat Lebas Khod Ra Baraye Lebas Zan Team Dovom Event Shomare Gharar Dadid')
-                        TriggerClientEvent('br_events:sync', source)
+                        TriggerClientEvent('FZ_events:sync', source)
                     end
                 end)
             end
@@ -310,58 +310,58 @@ AddEventHandler('br_events:changeskin', function(type, player, pos, source)
     end)
 end)
 
-RegisterNetEvent('br_events:removecar')
-AddEventHandler('br_events:removecar', function(type, source)
+RegisterNetEvent('FZ_events:removecar')
+AddEventHandler('FZ_events:removecar', function(type, source)
     if type == 'car1' then
         MySQL.Async.execute('UPDATE events_data SET car1 = NULL, car1_plate = NULL, car1_fuel = NULL, car1_marker = NULL', {}, function(rowsChanged)
             if rowsChanged > 0 then
                 TriggerClientEvent('esx:ShowJLNotification', source, 'Shoma Ba Movafaghiyat Option VasileNaghlie Aval Event Ra Reset Kardid')
-                TriggerClientEvent('br_events:sync', source)
+                TriggerClientEvent('FZ_events:sync', source)
             end
         end)
     elseif type == 'car2' then
         MySQL.Async.execute('UPDATE events_data SET car2 = NULL, car2_plate = NULL, car2_fuel = NULL, car2_marker = NULL', {}, function(rowsChanged)
             if rowsChanged > 0 then
                 TriggerClientEvent('esx:ShowJLNotification', source, 'Shoma Ba Movafaghiyat Option VasileNaghlie Dovom Event Ra Reset Kardid')
-                TriggerClientEvent('br_events:sync', source)
+                TriggerClientEvent('FZ_events:sync', source)
             end
         end)
     end
 end)
 
-RegisterNetEvent('br_events:removegun')
-AddEventHandler('br_events:removegun', function(type, source)
+RegisterNetEvent('FZ_events:removegun')
+AddEventHandler('FZ_events:removegun', function(type, source)
     if type == 'gun1' then
         MySQL.Async.execute('UPDATE events_data SET gun1 = NULL, gun1_ammo = NULL, gun1_marker = NULL', {}, function(rowsChanged)
             if rowsChanged > 0 then
                 TriggerClientEvent('esx:ShowJLNotification', source, 'Shoma Ba Movafaghiyat Option Aslahe Aval Event Ra Reset Kardid')
-                TriggerClientEvent('br_events:sync', source)
+                TriggerClientEvent('FZ_events:sync', source)
             end
         end)
     elseif type == 'gun2' then
         MySQL.Async.execute('UPDATE events_data SET gun2 = NULL, gun2_ammo = NULL, gun2_marker = NULL', {}, function(rowsChanged)
             if rowsChanged > 0 then
                 TriggerClientEvent('esx:ShowJLNotification', source, 'Shoma Ba Movafaghiyat Option Aslahe Dovom Event Ra Reset Kardid')
-                TriggerClientEvent('br_events:sync', source)
+                TriggerClientEvent('FZ_events:sync', source)
             end
         end)
     end
 end)
 
-RegisterNetEvent('br_events:removeskin')
-AddEventHandler('br_events:removeskin', function(type, source)
+RegisterNetEvent('FZ_events:removeskin')
+AddEventHandler('FZ_events:removeskin', function(type, source)
     if type == 'skin1' then
         MySQL.Async.execute('UPDATE events_data SET skin1_male = NULL, skin1_female = NULL, skin1_marker = NULL', {}, function(rowsChanged)
             if rowsChanged > 0 then
                 TriggerClientEvent('esx:ShowJLNotification', source, 'Shoma Ba Movafaghiyat Option Lebas Aval Event Ra Reset Kardid')
-                TriggerClientEvent('br_events:sync', source)
+                TriggerClientEvent('FZ_events:sync', source)
             end
         end)
     elseif type == 'skin2' then
         MySQL.Async.execute('UPDATE events_data SET skin2_male = NULL, skin2_female = NULL, skin2_marker = NULL', {}, function(rowsChanged)
             if rowsChanged > 0 then
                 TriggerClientEvent('esx:ShowJLNotification', source, 'Shoma Ba Movafaghiyat Option Lebas Dovom Event Ra Reset Kardid')
-                TriggerClientEvent('br_events:sync', source)
+                TriggerClientEvent('FZ_events:sync', source)
             end
         end)
     end
