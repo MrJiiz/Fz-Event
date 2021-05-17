@@ -16,9 +16,9 @@ Citizen.CreateThread(function()
 end)
 
 
-RegisterNetEvent('br_events:sync')
-AddEventHandler('br_events:sync', function()
-    FZ.TriggerServerCallback('br_events:getData', function(data)
+RegisterNetEvent('FZ_events:sync')
+AddEventHandler('FZ_events:sync', function()
+    FZ.TriggerServerCallback('FZ_events:getData', function(data)
         if data ~= nil then
             Fz.tp            = json.decode(data.tp)
             Fz.status        = json.decode(data.status)
@@ -52,7 +52,7 @@ RegisterCommand('event', function(source, args)
     local playerPed = GetPlayerPed(-1)
     local coords   = GetEntityCoords(playerPed)
     local inParking  = GetDistanceBetweenCoords(coords, 225.55, -786.38, 30.73, true) < 50
-    TriggerEvent('br_events:sync')
+    TriggerEvent('FZ_events:sync')
     if Fz.status == 1 then
         if inParking then
             DakheleEvent = true
@@ -442,26 +442,26 @@ Citizen.CreateThread(function()
                 
             if isInMarker and not HasAlreadyEnteredMarker or (isInMarker and (LastPart ~= currentPart)) then
                 if (LastPart ~= nil) and (LastPart ~= currentPart) then
-                    TriggerEvent('br_events:hasExitedMarker', LastPart)
+                    TriggerEvent('FZ_events:hasExitedMarker', LastPart)
                     hasExited = true
                 end
                 HasAlreadyEnteredMarker = true
                 LastPart                = currentPart
             
-                TriggerEvent('br_events:hasEnteredMarker', currentPart)
+                TriggerEvent('FZ_events:hasEnteredMarker', currentPart)
             end
             
             if not hasExited and not isInMarker and HasAlreadyEnteredMarker then
             
                 HasAlreadyEnteredMarker = false
             
-                TriggerEvent('br_events:hasExitedMarker', LastPart)
+                TriggerEvent('FZ_events:hasExitedMarker', LastPart)
             end
         end
     end
 end)
 
-AddEventHandler('br_events:hasEnteredMarker', function(part)
+AddEventHandler('FZ_events:hasEnteredMarker', function(part)
     if part == 'Car' then
         CurrentAction     = 'menu_car'
         CurrentActionMsg  = _U('open_car')
@@ -478,7 +478,7 @@ AddEventHandler('br_events:hasEnteredMarker', function(part)
     end  
 end)
         
-AddEventHandler('br_events:hasExitedMarker', function(part)
+AddEventHandler('FZ_events:hasExitedMarker', function(part)
     FZ.UI.Menu.CloseAll()
     CurrentAction = nil
 end)
